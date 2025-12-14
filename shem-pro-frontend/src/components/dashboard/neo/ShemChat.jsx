@@ -48,11 +48,11 @@ const ShemChat = ({ contextData }) => {
 
             {/* Chat Window */}
             {isOpen && (
-                <div className="fixed bottom-24 right-6 w-96 max-w-[calc(100vw-3rem)] h-[500px] bg-dashboard-card border border-white/10 rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden fade-in-up">
+                <div className="fixed bottom-24 right-6 w-96 max-w-[calc(100vw-3rem)] h-[500px] bg-dashboard-card border border-dashboard-textSecondary/10 rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden fade-in-up">
                     {/* Header */}
-                    <div className="bg-dashboard-bg p-4 border-b border-white/5 flex items-center gap-2">
+                    <div className="bg-dashboard-bg p-4 border-b border-dashboard-textSecondary/10 flex items-center gap-2">
                         <SparklesIcon className="h-5 w-5 text-accent" />
-                        <h3 className="font-bold text-white">SHEM Assistant</h3>
+                        <h3 className="font-bold text-dashboard-text">SHEM Assistant</h3>
                     </div>
 
                     {/* Messages */}
@@ -61,19 +61,19 @@ const ShemChat = ({ contextData }) => {
                             <div
                                 key={idx}
                                 className={`max-w-[80%] p-3 rounded-lg text-sm ${msg.role === 'user'
-                                        ? 'bg-accent text-dashboard-bg self-end ml-auto rounded-br-none'
-                                        : 'bg-white/10 text-white self-start rounded-bl-none'
+                                    ? 'bg-accent text-dashboard-bg self-end ml-auto rounded-br-none'
+                                    : 'bg-dashboard-text/10 text-dashboard-text self-start rounded-bl-none'
                                     }`}
                             >
                                 {msg.content}
                             </div>
                         ))}
                         {loading && (
-                            <div className="bg-white/5 self-start p-3 rounded-lg rounded-bl-none">
+                            <div className="bg-dashboard-text/5 self-start p-3 rounded-lg rounded-bl-none">
                                 <div className="flex gap-1">
-                                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
-                                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></span>
-                                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></span>
+                                    <span className="w-2 h-2 bg-dashboard-textSecondary rounded-full animate-bounce"></span>
+                                    <span className="w-2 h-2 bg-dashboard-textSecondary rounded-full animate-bounce delay-100"></span>
+                                    <span className="w-2 h-2 bg-dashboard-textSecondary rounded-full animate-bounce delay-200"></span>
                                 </div>
                             </div>
                         )}
@@ -81,14 +81,14 @@ const ShemChat = ({ contextData }) => {
                     </div>
 
                     {/* Input */}
-                    <div className="p-4 bg-dashboard-bg border-t border-white/5 flex gap-2">
+                    <div className="p-4 bg-dashboard-bg border-t border-dashboard-textSecondary/10 flex gap-2">
                         <input
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                             placeholder="Ask about your energy..."
-                            className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:border-accent font-sans text-sm"
+                            className="flex-1 bg-dashboard-text/5 border border-dashboard-textSecondary/20 rounded-lg px-3 py-2 text-dashboard-text placeholder-dashboard-textSecondary focus:outline-none focus:border-accent font-sans text-sm"
                         />
                         <button
                             onClick={handleSend}

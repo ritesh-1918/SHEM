@@ -163,7 +163,10 @@ const Dashboard = () => {
 
       {/* Main Content Area */}
       <div className="flex-1 ml-20 flex flex-col min-h-screen">
-        <DashboardHeader title={activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} />
+        <DashboardHeader
+          title={activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+          onProfileClick={() => setActiveTab('settings')}
+        />
 
         <main className="flex-1 p-8 overflow-y-auto w-full max-w-[1600px] mx-auto">
           <Suspense fallback={<WidgetLoader />}>

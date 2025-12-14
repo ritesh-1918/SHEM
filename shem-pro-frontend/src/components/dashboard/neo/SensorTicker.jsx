@@ -2,15 +2,15 @@ import React from 'react';
 import { BoltIcon, FireIcon, CurrencyRupeeIcon, SignalIcon, SparklesIcon, ScaleIcon } from '@heroicons/react/24/solid';
 
 const MetricCard = ({ label, value, unit, change, icon: Icon, color = "text-accent" }) => (
-    <div className="flex-shrink-0 bg-dashboard-card rounded-lg p-4 w-52 mr-4 border border-white/5 hover:border-accent/30 transition-colors">
+    <div className="flex-shrink-0 bg-dashboard-card rounded-lg p-4 w-52 mr-4 border border-dashboard-textSecondary/10 hover:border-accent/30 transition-colors">
         <div className="flex items-center gap-3 mb-2">
-            <div className={`p-2 rounded-lg bg-white/5 ${color}`}>
+            <div className={`p-2 rounded-lg bg-dashboard-text/5 ${color}`}>
                 <Icon className="h-5 w-5" />
             </div>
             <span className="text-dashboard-textSecondary text-sm font-medium">{label}</span>
         </div>
         <div className="flex items-end justify-between">
-            <span className="text-xl font-bold text-white tracking-tight">
+            <span className="text-xl font-bold text-dashboard-text tracking-tight">
                 {value} <span className="text-sm text-dashboard-textSecondary font-normal">{unit}</span>
             </span>
             {change && (

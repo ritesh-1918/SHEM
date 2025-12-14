@@ -5,16 +5,24 @@ interface AIConfig {
     openRouter?: string;
     groq?: string;
     gemini?: string;
-    activeProvider: 'openRouter' | 'groq' | 'gemini';
+    activeProvider: 'openRouter' | 'groq' | 'gemini' | null;
 }
 
 const getAIConfig = (): AIConfig => {
-    // Environment Variables (Secure)
+    const openRouter = import.meta.env.VITE_OPENROUTER_KEY;
+    const groq = import.meta.env.VITE_GROQ_KEY;
+    const gemini = import.meta.env.VITE_GEMINI_KEY;
+
+    let activeProvider: 'openRouter' | 'groq' | 'gemini' | null = null;
+    if (openRouter) activeProvider = 'openRouter';
+    else if (groq) activeProvider = 'groq';
+    else if (gemini) activeProvider = 'gemini';
+
     return {
-        openRouter: import.meta.env.VITE_OPENROUTER_KEY || '',
-        groq: import.meta.env.VITE_GROQ_KEY || '',
-        gemini: import.meta.env.VITE_GEMINI_KEY || '',
-        activeProvider: 'openRouter'
+        openRouter: openRouter || '',
+        groq: groq || '',
+        gemini: gemini || '',
+        activeProvider
     };
 };
 
@@ -26,6 +34,10 @@ export const generateAIResponse = async (prompt: string, contextData?: any) => {
     Provide a concise, helpful response focusing on energy efficiency and cost savings. Keep it under 50 words unless asked for details.`;
 
     try {
+        if (!config.activeProvider) {
+            return "Please configure your AI API Keys in Settings to enable the assistant.";
+        }
+
         if (config.activeProvider === 'gemini' && config.gemini) {
             // Google Gemini API Call
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${config.gemini}`;
@@ -62,7 +74,7 @@ export const generateAIResponse = async (prompt: string, contextData?: any) => {
             return response.data.choices[0].message.content;
         }
 
-        return "Please configure your AI API Keys in Settings to enable the assistant.";
+        return "Configuration error: Active provider set but key missing.";
 
     } catch (error) {
         console.error("AI Error:", error);

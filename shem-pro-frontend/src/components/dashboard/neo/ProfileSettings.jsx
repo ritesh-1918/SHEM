@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { UserCircleIcon, CameraIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { UserCircleIcon, CameraIcon } from '@heroicons/react/24/outline';
 import { useAuth } from '../../../context/AuthContext';
+import ThemeSwitcher from '../../ThemeSwitcher';
 
 const ProfileSettings = () => {
-    const { user, loading } = useAuth();
+    const { user } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
         displayName: '',
@@ -38,7 +39,6 @@ const ProfileSettings = () => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setProfileImage(reader.result);
-                // Here you would typically upload to backend/firebase
             };
             reader.readAsDataURL(file);
         }
@@ -46,20 +46,19 @@ const ProfileSettings = () => {
 
     const handleSave = () => {
         setIsEditing(false);
-        // Dispatch update to AuthContext or Backend here
         console.log("Saving profile:", formData, profileImage);
         alert("Profile updated successfully! (Simulation)");
     };
 
     return (
-        <div className="bg-dashboard-card rounded-xl p-8 border border-white/5 max-w-4xl mx-auto">
-            <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-bold text-white">Profile Settings</h2>
+        <div className="bg-dashboard-card rounded-xl p-8 border border-dashboard-textSecondary/10 max-w-4xl mx-auto space-y-8">
+            <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-dashboard-text">Profile Settings</h2>
                 <button
                     onClick={() => isEditing ? handleSave() : setIsEditing(true)}
                     className={`px-6 py-2 rounded-lg font-bold transition-all ${isEditing
-                        ? 'bg-dashboard-success text-white hover:bg-green-600'
-                        : 'bg-accent text-dashboard-bg hover:bg-yellow-500'}`}
+                        ? 'bg-dashboard-success text-white hover:opacity-90'
+                        : 'bg-accent text-primary-DEFAULT hover:opacity-90'}`}
                 >
                     {isEditing ? 'Save Changes' : 'Edit Profile'}
                 </button>
@@ -69,11 +68,11 @@ const ProfileSettings = () => {
                 {/* Profile Image Column */}
                 <div className="flex flex-col items-center gap-4">
                     <div className="relative group">
-                        <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white/10 relative bg-dashboard-bg">
+                        <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-dashboard-textSecondary/10 relative bg-dashboard-bg">
                             {profileImage ? (
                                 <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
                             ) : (
-                                <UserCircleIcon className="w-full h-full text-gray-500" />
+                                <UserCircleIcon className="w-full h-full text-dashboard-textSecondary" />
                             )}
                         </div>
                         {isEditing && (
@@ -83,9 +82,6 @@ const ProfileSettings = () => {
                             </label>
                         )}
                     </div>
-                    <p className="text-dashboard-textSecondary text-sm">
-                        {isEditing ? 'Click image to edit' : 'Profile Picture'}
-                    </p>
                 </div>
 
                 {/* Form Column */}
@@ -98,7 +94,7 @@ const ProfileSettings = () => {
                             value={formData.displayName}
                             onChange={handleChange}
                             disabled={!isEditing}
-                            className="w-full bg-dashboard-bg border border-white/10 rounded-lg px-4 py-3 text-white focus:border-accent focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-dashboard-bg border border-dashboard-textSecondary/20 rounded-lg px-4 py-3 text-dashboard-text focus:border-accent focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                         />
                     </div>
 
@@ -109,8 +105,8 @@ const ProfileSettings = () => {
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
-                            disabled={!isEditing} // Often email is immutable or requires verification
-                            className="w-full bg-dashboard-bg border border-white/10 rounded-lg px-4 py-3 text-white focus:border-accent focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={!isEditing}
+                            className="w-full bg-dashboard-bg border border-dashboard-textSecondary/20 rounded-lg px-4 py-3 text-dashboard-text focus:border-accent focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                         />
                     </div>
 
@@ -122,7 +118,7 @@ const ProfileSettings = () => {
                             value={formData.phone}
                             onChange={handleChange}
                             disabled={!isEditing}
-                            className="w-full bg-dashboard-bg border border-white/10 rounded-lg px-4 py-3 text-white focus:border-accent focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-dashboard-bg border border-dashboard-textSecondary/20 rounded-lg px-4 py-3 text-dashboard-text focus:border-accent focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                         />
                     </div>
 
@@ -134,11 +130,15 @@ const ProfileSettings = () => {
                             value={formData.homeSize}
                             onChange={handleChange}
                             disabled={!isEditing}
-                            className="w-full bg-dashboard-bg border border-white/10 rounded-lg px-4 py-3 text-white focus:border-accent focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-dashboard-bg border border-dashboard-textSecondary/20 rounded-lg px-4 py-3 text-dashboard-text focus:border-accent focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                         />
                     </div>
                 </div>
             </div>
+
+            <hr className="border-dashboard-textSecondary/10" />
+
+            <ThemeSwitcher />
         </div>
     );
 };

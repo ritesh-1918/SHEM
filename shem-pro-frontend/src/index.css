@@ -2,13 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    /* Default (Premium Dark) */
+    --color-bg: #1a1d29;
+    --color-card: #252836;
+    --color-text: #ffffff;
+    --color-text-secondary: #8a8d9c;
+    --color-accent: #f7b529;
+    --color-success: #22c55e;
+    --color-danger: #ef4444;
+  }
+
+  [data-theme='light'] {
+    --color-bg: #f3f4f6;
+    --color-card: #ffffff;
+    --color-text: #111827;
+    --color-text-secondary: #4b5563;
+    --color-accent: #2563eb;
+    --color-success: #16a34a;
+    --color-danger: #dc2626;
+  }
+
+  [data-theme='cyberpunk'] {
+    --color-bg: #050510;
+    --color-card: #0f0b29;
+    --color-text: #e2e8f0;
+    --color-text-secondary: #94a3b8;
+    --color-accent: #d946ef;
+    /* Fuchsia */
+    --color-success: #00ff9d;
+    --color-danger: #ff0055;
+  }
+
+  [data-theme='nature'] {
+    --color-bg: #ecfdf5;
+    --color-card: #ffffff;
+    --color-text: #064e3b;
+    --color-text-secondary: #065f46;
+    --color-accent: #059669;
+    /* Emerald */
+    --color-success: #047857;
+    --color-danger: #be123c;
+  }
+}
+
+
 @keyframes pulse-glow {
   0% {
     box-shadow: 0 0 0px 0px rgba(0, 123, 255, 0.7);
   }
+
   50% {
     box-shadow: 0 0 10px 5px rgba(0, 123, 255, 0.7);
   }
+
   100% {
     box-shadow: 0 0 0px 0px rgba(0, 123, 255, 0.7);
   }

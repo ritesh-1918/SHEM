@@ -136,7 +136,7 @@ export const useEnergyDataFetcher = (): EnergyDataFetcherHook => {
           setHistoricalData(formattedData);
         } catch (err: any) {
           console.error('Error fetching historical data:', err);
-          toast.error('Failed to fetch historical data.', { id: 'history-error-toast' });
+          addNotification('Failed to fetch historical data.', 'warning');
         }
       };
 
@@ -151,7 +151,7 @@ export const useEnergyDataFetcher = (): EnergyDataFetcherHook => {
           setSevenDayHistoricalData(formattedData);
         } catch (err: any) {
           console.error('Error fetching 7-day historical data:', err);
-          toast.error('Failed to fetch 7-day historical data.', { id: '7day-history-error-toast' });
+          addNotification('Failed to fetch 7-day historical data.', 'warning');
         }
       };
 

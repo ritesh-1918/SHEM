@@ -10,7 +10,7 @@ const Sidebar = ({ activeTab = 'dashboard', setActiveTab }) => {
     ];
 
     return (
-        <div className="w-20 h-screen bg-dashboard-bg fixed left-0 top-0 flex flex-col items-center py-6 border-r border-[#2d3142] z-50">
+        <div className="w-20 h-screen bg-dashboard-bg fixed left-0 top-0 flex flex-col items-center py-6 border-r border-dashboard-textSecondary/20 z-50">
             {/* Logo */}
             <div className="mb-10 text-accent">
                 <BoltIcon className="h-8 w-8" />
@@ -23,14 +23,14 @@ const Sidebar = ({ activeTab = 'dashboard', setActiveTab }) => {
                         key={item.id}
                         onClick={() => setActiveTab(item.id)}
                         className={`p-3 rounded-xl transition-all duration-300 group relative ${activeTab === item.id
-                                ? 'bg-accent/10 text-accent'
-                                : 'text-dashboard-textSecondary hover:text-white hover:bg-white/5'
+                            ? 'bg-accent/10 text-accent'
+                            : 'text-dashboard-textSecondary hover:text-dashboard-text hover:bg-dashboard-text/5'
                             }`}
                     >
                         <item.icon className="h-6 w-6" />
 
                         {/* Tooltip */}
-                        <span className="absolute left-14 bg-dashboard-card text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-gray-700">
+                        <span className="absolute left-14 bg-dashboard-card text-dashboard-text text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-dashboard-textSecondary/20 z-50">
                             {item.label}
                         </span>
 

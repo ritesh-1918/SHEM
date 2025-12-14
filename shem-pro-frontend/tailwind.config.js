@@ -9,21 +9,21 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          light: '#4B5563', // gray-600
-          DEFAULT: '#111827', // gray-900 (keeping this as "primary" for now to avoid breaking existing pages too much)
+          light: '#4B5563',
+          DEFAULT: '#111827',
           dark: '#0e121d',
         },
         accent: {
-          DEFAULT: '#f7b529', // Gold
-          hover: '#d99f24',
+          DEFAULT: 'var(--color-accent)',
+          hover: 'var(--color-accent)', // We can add separate hover vars if needed later
         },
         dashboard: {
-          bg: '#1a1d29', // Main background
-          card: '#252836', // Card background
-          text: '#ffffff',
-          textSecondary: '#8a8d9c',
-          success: '#22c55e',
-          danger: '#ef4444',
+          bg: 'var(--color-bg)',
+          card: 'var(--color-card)',
+          text: 'var(--color-text)',
+          textSecondary: 'var(--color-text-secondary)',
+          success: 'var(--color-success)',
+          danger: 'var(--color-danger)',
         },
         neutralBg: {
           light: '#f9f9f9',
