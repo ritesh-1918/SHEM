@@ -1,0 +1,26 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "shem-pro-backend/server.js",
+            "use": "@vercel/node"
+        },
+        {
+            "src": "shem-pro-frontend/package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "dist"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "/shem-pro-backend/server.js"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/shem-pro-frontend/$1"
+        }
+    ]
+}

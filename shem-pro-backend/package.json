@@ -18,8 +18,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.12",
-    "react-router-hash-link": "^2.4.3"
+    "mongoose": "^6.0.12"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
