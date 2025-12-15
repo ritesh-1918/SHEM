@@ -31,8 +31,7 @@ const Support: React.FC = () => {
                             </div>
                             <div>
                                 <h3 className="font-semibold text-lg">Email Us</h3>
-                                <p className="text-gray-600">contact@shem.com</p>
-                                <p className="text-gray-600">support@shem.com</p>
+                                <p className="text-gray-600">shemcontact1918@gmail.com</p>
                             </div>
                         </div>
 
@@ -42,7 +41,7 @@ const Support: React.FC = () => {
                             </div>
                             <div>
                                 <h3 className="font-semibold text-lg">Call Us</h3>
-                                <p className="text-gray-600">+91 98765 43210</p>
+                                <p className="text-gray-600">8464931322</p>
                                 <p className="text-gray-500 text-sm">Mon - Fri, 9am - 6pm</p>
                             </div>
                         </div>
@@ -53,8 +52,21 @@ const Support: React.FC = () => {
                             </div>
                             <div>
                                 <h3 className="font-semibold text-lg">Visit Us</h3>
-                                <p className="text-gray-600">SHEM Labs, Department of ECE</p>
-                                <p className="text-gray-600">Main University Campus</p>
+                                <p className="text-gray-600">65-3-508/A, Ex Service Men Colony, Gajuwaka</p>
+                                <p className="text-gray-600">Visakhapatnam, Andhra Pradesh 530011</p>
+                                {/* Map Placeholder */}
+                                <div className="mt-4 w-full h-48 bg-gray-200 rounded-lg overflow-hidden relative">
+                                    <iframe
+                                        src="https://www.google.com/maps/embed?pb=!1m13!1m11!1m3!1d522.2121545494595!2d83.23090270994129!3d17.68509606164326!2m2!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sin!4v1765820004677!5m2!1sen!2sin"
+                                        width="100%"
+                                        height="100%"
+                                        style={{ border: 0 }}
+                                        allowFullScreen
+                                        loading="lazy"
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                        title="Google Map"
+                                    ></iframe>
+                                </div>
                             </div>
                         </div>
                     </div>

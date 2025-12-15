@@ -5,25 +5,53 @@ interface AIConfig {
     openRouter?: string;
     groq?: string;
     gemini?: string;
-    activeProvider: 'openRouter' | 'groq' | 'gemini' | null;
 }
 
 const getAIConfig = (): AIConfig => {
-    const openRouter = import.meta.env.VITE_OPENROUTER_KEY;
-    const groq = import.meta.env.VITE_GROQ_KEY;
-    const gemini = import.meta.env.VITE_GEMINI_KEY;
-
-    let activeProvider: 'openRouter' | 'groq' | 'gemini' | null = null;
-    if (openRouter) activeProvider = 'openRouter';
-    else if (groq) activeProvider = 'groq';
-    else if (gemini) activeProvider = 'gemini';
-
     return {
-        openRouter: openRouter || '',
-        groq: groq || '',
-        gemini: gemini || '',
-        activeProvider
+        openRouter: import.meta.env.VITE_OPENROUTER_KEY,
+        groq: import.meta.env.VITE_GROQ_KEY,
+        gemini: import.meta.env.VITE_GEMINI_KEY
     };
+};
+
+const callGemini = async (prompt: string, key: string) => {
+    // Using gemini-2.0-flash as determined by backend debugging
+    // Using 1.5-flash as a fallback if 2.0 isn't widely available yet, 
+    // but the user's latest key seemed to work with flash. 
+    // Let's stick to gemini-1.5-flash for safety as 2.0-flash might be preview/unstable relative to simple API.
+    // Actually per backend debug, gemini-2.0-flash was in the list.
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`;
+    const response = await axios.post(url, {
+        contents: [{ parts: [{ text: prompt }] }]
+    });
+    return response.data.candidates[0].content.parts[0].text;
+};
+
+const callGroq = async (prompt: string, key: string) => {
+    // Model updated to llama3-70b-8192 as mixtral was decommissioned
+    const response = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
+        messages: [{ role: 'user', content: prompt }],
+        model: 'llama-3.3-70b-versatile'
+    }, {
+        headers: {
+            'Authorization': `Bearer ${key}`,
+            'Content-Type': 'application/json'
+        }
+    });
+    return response.data.choices[0].message.content;
+};
+
+const callOpenRouter = async (prompt: string, key: string) => {
+    const response = await axios.post('https://openrouter.ai/api/v1/chat/completions', {
+        messages: [{ role: 'user', content: prompt }],
+        model: 'openai/gpt-3.5-turbo'
+    }, {
+        headers: {
+            'Authorization': `Bearer ${key}`,
+        }
+    });
+    return response.data.choices[0].message.content;
 };
 
 export const generateAIResponse = async (prompt: string, contextData?: any) => {
@@ -33,51 +61,35 @@ export const generateAIResponse = async (prompt: string, contextData?: any) => {
     User Question: ${prompt}
     Provide a concise, helpful response focusing on energy efficiency and cost savings. Keep it under 50 words unless asked for details.`;
 
-    try {
-        if (!config.activeProvider) {
-            return "Please configure your AI API Keys in Settings to enable the assistant.";
+    // Attempt 1: Gemini
+    if (config.gemini) {
+        try {
+            console.log("Attempting Gemini (Frontend)...");
+            return await callGemini(systemPrompt, config.gemini);
+        } catch (error) {
+            console.error("Gemini Frontend Failed:", error);
         }
-
-        if (config.activeProvider === 'gemini' && config.gemini) {
-            // Google Gemini API Call
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${config.gemini}`;
-            const response = await axios.post(url, {
-                contents: [{ parts: [{ text: systemPrompt }] }]
-            });
-            return response.data.candidates[0].content.parts[0].text;
-        }
-
-        else if (config.activeProvider === 'groq' && config.groq) {
-            // Groq API Call
-            const response = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
-                messages: [{ role: 'user', content: systemPrompt }],
-                model: 'mixtral-8x7b-32768'
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${config.groq}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-            return response.data.choices[0].message.content;
-        }
-
-        else if (config.activeProvider === 'openRouter' && config.openRouter) {
-            // OpenRouter API Call
-            const response = await axios.post('https://openrouter.ai/api/v1/chat/completions', {
-                messages: [{ role: 'user', content: systemPrompt }],
-                model: 'openai/gpt-3.5-turbo' // Default cheap model
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${config.openRouter}`,
-                }
-            });
-            return response.data.choices[0].message.content;
-        }
-
-        return "Configuration error: Active provider set but key missing.";
-
-    } catch (error) {
-        console.error("AI Error:", error);
-        return "Sorry, I encountered an error communicating with the AI service. Please check your API keys.";
     }
+
+    // Attempt 2: Groq
+    if (config.groq) {
+        try {
+            console.log("Attempting Groq (Frontend)...");
+            return await callGroq(systemPrompt, config.groq);
+        } catch (error) {
+            console.error("Groq Frontend Failed:", error);
+        }
+    }
+
+    // Attempt 3: OpenRouter
+    if (config.openRouter) {
+        try {
+            console.log("Attempting OpenRouter (Frontend)...");
+            return await callOpenRouter(systemPrompt, config.openRouter);
+        } catch (error) {
+            console.error("OpenRouter Frontend Failed:", error);
+        }
+    }
+
+    return "Sorry, I encountered an error communicating with ALL AI services. Please check your API keys.";
 };
