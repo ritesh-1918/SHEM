@@ -14,7 +14,8 @@ api.interceptors.request.use(
       config.headers['x-auth-token'] = token;
 
       // Demo Mode Mock Adapter
-      if (token === 'demo-token-bypass') {
+      // Don't mock ESP32 data endpoint so we can see real data
+      if (token === 'demo-token-bypass' && !config.url?.includes('esp32data')) {
         config.adapter = async (config) => {
           return new Promise((resolve) => {
             const mockData = {

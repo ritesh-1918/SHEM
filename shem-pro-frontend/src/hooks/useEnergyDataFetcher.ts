@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @ts-ignore
-import { getLiveSensorData, getHistoryData, getSevenDayHistoryData } from '../services/api';
+import { getLiveSensorData, getHistoryData, getSevenDayHistoryData, getEsp32LatestData } from '../services/api';
 import toast from 'react-hot-toast';
 import { useNotification } from '../context/NotificationContext'; // NEW
 
@@ -42,13 +42,41 @@ export const useEnergyDataFetcher = (): EnergyDataFetcherHook => {
     const isDemoMode = sessionStorage.getItem('demoUser') !== null;
 
     if (isDemoMode) {
-      const generateMockLiveData = (): LiveData => ({
-        power: parseFloat((Math.random() * (2500 - 500) + 500).toFixed(1)), // 500W to 2500W
-        voltage: parseFloat((Math.random() * (240 - 220) + 220).toFixed(1)), // 220V to 240V
-        current: parseFloat((Math.random() * (10 - 2) + 2).toFixed(1)), // 2A to 10A
-        energy: parseFloat((Math.random() * 5).toFixed(2)), // 0 to 5 kWh
-        timestamp: new Date().toISOString(),
-      });
+      const fetchDemoRealData = async () => {
+        try {
+          const esp32Data = await getEsp32LatestData();
+          // Map backend data to frontend interface
+          // Backend: { voltage, current, power, energy_kWh, cost_rs, timestamp }
+          // Frontend: { power, voltage, current, energy, timestamp }
+          const mappedData: LiveData = {
+            power: esp32Data.power || 0,
+            voltage: esp32Data.voltage || 0,
+            current: esp32Data.current || 0,
+            energy: esp32Data.energy_kWh || 0,
+            timestamp: esp32Data.timestamp || new Date().toISOString()
+          };
+
+          setLiveData(mappedData);
+          setHistoricalData(prevData => {
+            const updatedData = [...prevData, {
+              time: new Date(mappedData.timestamp).toLocaleTimeString(),
+              power: mappedData.power.toFixed(1),
+              energy: mappedData.energy,
+            }];
+            if (updatedData.length > 30) {
+              return updatedData.slice(updatedData.length - 30);
+            }
+            return updatedData;
+          });
+
+          setStatus('Demo Live (Real Data)');
+          setIsOnline(true);
+          setIsLoading(false);
+        } catch (error) {
+          console.error("Failed to fetch ESP32 data in demo mode", error);
+          // Fallback or just log? For now let's just keep trying.
+        }
+      };
 
       const generateMockSevenDayHistoricalData = (): HistoricalDataPoint[] => {
         const data = [];
@@ -64,25 +92,15 @@ export const useEnergyDataFetcher = (): EnergyDataFetcherHook => {
         return data;
       };
 
+      // Initial Call
+      fetchDemoRealData();
+      setSevenDayHistoricalData(generateMockSevenDayHistoricalData());
+
       const interval = setInterval(() => {
-        const newDataPoint = generateMockLiveData();
-        setLiveData(newDataPoint);
-        setHistoricalData(prevData => {
-          const updatedData = [...prevData, {
-            time: new Date(newDataPoint.timestamp).toLocaleTimeString(),
-            power: newDataPoint.power.toFixed(1),
-            energy: newDataPoint.energy,
-          }];
-          if (updatedData.length > 30) {
-            return updatedData.slice(updatedData.length - 30);
-          }
-          return updatedData;
-        });
+        fetchDemoRealData();
+        // seven day history remains mock for now as backend might not have it populated
         setSevenDayHistoricalData(generateMockSevenDayHistoricalData());
-        setStatus('Demo Live');
-        setIsOnline(true);
-        setIsLoading(false);
-      }, 1000); // Update every 1 second for demo mode
+      }, 3000); // Poll every 3 seconds
 
       return () => clearInterval(interval);
     } else {
