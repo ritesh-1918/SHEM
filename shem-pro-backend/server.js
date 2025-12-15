@@ -20,6 +20,7 @@ app.use('/api/data', require('./routes/data'));
 app.use('/api/demo', require('./routes/demo'));
 app.use('/api/esp32data', require('./routes/esp32data'));
 app.use('/api/chat', require('./routes/chat'));
+app.use('/api/peakHours', require('./routes/peakHours'));
 
 const PORT = process.env.PORT || 5000;
 

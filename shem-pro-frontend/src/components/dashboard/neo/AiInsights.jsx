@@ -15,12 +15,9 @@ const AiInsights = ({ data }) => {
         setLoading(false);
     };
 
-    useEffect(() => {
-        if (data) {
-            fetchInsight();
-        }
-    }, [data]); // Re-run when data changes significantly? Maybe too expensive. 
-    // In prod, debounce or run once on mount/interval.
+    // Removed automatic fetching on data change to limit API usage.
+    // Insight can be fetched manually via the button below.
+    // If periodic updates are desired, implement a timer with a longer interval.
 
     return (
         <div className="bg-gradient-to-r from-indigo-900/50 to-purple-900/50 rounded-xl p-6 border border-white/10 relative overflow-hidden text-white">

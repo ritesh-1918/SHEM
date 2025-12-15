@@ -20,6 +20,8 @@ const EnergyDistributionWidget = lazy(() => import('./dashboard/neo/EnergyDistri
 const CostAnalysisWidget = lazy(() => import('./dashboard/neo/CostAnalysisWidget'));
 const NeoDeviceControl = lazy(() => import('./dashboard/neo/NeoDeviceControl'));
 const ProfileSettings = lazy(() => import('./dashboard/neo/ProfileSettings'));
+const PeakHoursCard = lazy(() => import('./dashboard/neo/PeakHoursCard'));
+const CostOptimizer = lazy(() => import('./dashboard/neo/CostOptimizer'));
 
 // Simple widget loader
 const WidgetLoader = () => (
@@ -84,6 +86,12 @@ const Dashboard = () => {
               <div>
                 <NeoDeviceControl />
               </div>
+            </section>
+
+            {/* Peak Hours & Savings */}
+            <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <PeakHoursCard data={esp32Data || liveData} userId={user?.id || 'user123'} />
+              <CostOptimizer userId={user?.id || 'user123'} onNavigateToControl={() => setActiveTab('control')} />
             </section>
           </div>
         );
