@@ -30,7 +30,7 @@ const ThemeSwitcher = () => {
                                 relative p-3 rounded-lg border transition-all duration-200 flex items-center gap-2
                                 ${isActive
                                     ? 'border-accent bg-accent/10 text-accent ring-1 ring-accent'
-                                    : 'border-white/10 hover:border-white/20 text-dashboard-textSecondary hover:text-dashboard-text hover:bg-dashboard-text/5'
+                                    : 'border-dashboard-textSecondary/30 hover:border-dashboard-textSecondary/50 text-dashboard-textSecondary hover:text-dashboard-text hover:bg-dashboard-textSecondary/10'
                                 }
                             `}
                         >
