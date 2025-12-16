@@ -9,8 +9,10 @@ import {
     CalculatorIcon
 } from '@heroicons/react/24/solid';
 
-// API base URL
-const API_BASE = 'http://localhost:5000/api/peakHours';
+// API base URL - uses Render production or localhost for development
+const API_BASE = import.meta.env.VITE_API_BASE_URL
+    ? `${import.meta.env.VITE_API_BASE_URL}/peakHours`
+    : 'http://localhost:5000/api/peakHours';
 
 // Appliance suggestions with icons and savings
 const APPLIANCE_SUGGESTIONS = [
